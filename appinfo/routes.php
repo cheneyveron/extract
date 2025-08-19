@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Create your routes in here. The name is the lowercase name of the controller
  * without the controller part, the stuff after the hash is the method.
@@ -8,11 +9,11 @@
  * it's instantiated in there
  */
 return [
-    'routes' => [
-       [
-            'name' => 'extraction#extract',
-            'url'  => 'ajax/extract.php',
-            'verb' => 'POST'
-        ],
-    ]
+	'routes' => [
+		[
+			'name' => 'extraction#extract',
+			'url' => 'ajax/extract.php',
+			'verb' => 'POST'
+		],
+	]
 ];

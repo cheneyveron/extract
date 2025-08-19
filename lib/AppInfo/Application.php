@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author Claus-Justus Heine
  * @copyright 2022 Claus-Justus Heine <himself@claus-justus-heine.de>
@@ -22,15 +23,15 @@ namespace OCA\Extract\AppInfo;
 
 use OCA\Extract\Listener\LoadExtractActions;
 use OCA\Files\Event\LoadAdditionalScriptsEvent;
-use OCP\AppFramework\Bootstrap\IBootstrap;
-use OCP\AppFramework\Bootstrap\IRegistrationContext;
-use OCP\AppFramework\Bootstrap\IBootContext;
-
 use OCP\AppFramework\App;
+use OCP\AppFramework\Bootstrap\IBootContext;
+use OCP\AppFramework\Bootstrap\IBootstrap;
 
-class Application extends App  implements IBootstrap {
+use OCP\AppFramework\Bootstrap\IRegistrationContext;
 
-	public const APP_ID = "extract";
+class Application extends App implements IBootstrap {
+
+	public const APP_ID = 'extract';
 
 	public function __construct(array $urlParams = []) {
 		parent::__construct(self::APP_ID, $urlParams);
