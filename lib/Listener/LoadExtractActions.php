@@ -15,16 +15,14 @@ use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
 use OCP\Util;
 
-class LoadExtractActions implements IEventListener
-{
-    public function handle(Event $event): void
-    {
-        if (!($event instanceof LoadAdditionalScriptsEvent)) {
-            return;
-        }
+class LoadExtractActions implements IEventListener {
+	public function handle(Event $event): void {
+		if (!($event instanceof LoadAdditionalScriptsEvent)) {
+			return;
+		}
 
-        Util::addInitScript(Application::APP_ID, 'extract-init');
-        Util::addScript(Application::APP_ID, 'extract-extractAction');
-        Util::addStyle(Application::APP_ID, 'style');
-    }
+		Util::addInitScript(Application::APP_ID, 'extract-init');
+		Util::addScript(Application::APP_ID, 'extract-extractAction');
+		Util::addStyle(Application::APP_ID, 'style');
+	}
 }

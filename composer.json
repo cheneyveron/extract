@@ -1,22 +1,46 @@
 {
-    "name": "extract/extract",
-    "description": "Allows to extract archive from the web interface",
-    "type": "project",
-    "license": "AGPL",
-    "authors": [
-        {
-            "name": "Paul Lereverend"
-        }
-    ],
-    "config": {
-        "optimize-autoloader": true,
-        "sort-packages": true,
-        "platform": {
-            "php": "8.1"
-        }
-    },
-    "require": {},
-    "require-dev": {
-        "nextcloud/ocp": "dev-stable29"
+  "name": "extract/extract",
+  "description": "Allows to extract archive from the web interface",
+  "type": "project",
+  "license": "AGPL",
+  "authors": [
+    {
+      "name": "Paul Lereverend"
     }
+  ],
+  "config": {
+    "optimize-autoloader": true,
+    "sort-packages": true,
+    "platform": {
+      "php": "8.1"
+    },
+    "allow-plugins": {
+      "bamarni/composer-bin-plugin": true
+    }
+  },
+  "require": {
+    "bamarni/composer-bin-plugin": "^1.8"
+  },
+  "require-dev": {
+    "nextcloud/ocp": "dev-stable29"
+  },
+  "scripts": {
+    "bin": "echo 'bin not installed'",
+    "lint": "find . -name \\*.php -not -path './vendor/*' -not -path './build/*' -not -path './tests/integration/vendor/*' -print0 | xargs -0 -n1 php -l",
+    "cs:check": "php-cs-fixer fix --dry-run --diff",
+    "cs:fix": "php-cs-fixer fix",
+    "post-install-cmd": [
+      "@composer bin all install --ansi",
+      "composer dump-autoload"
+    ],
+    "post-update-cmd": [
+      "composer dump-autoload"
+    ]
+  },
+  "extra": {
+    "bamarni-bin": {
+      "bin-links": true,
+      "forward-command": true
+    }
+  }
 }

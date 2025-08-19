@@ -5,25 +5,24 @@ namespace OCA\Extract\Controller;
 // Only in order to access Filesystem::isFileBlacklisted().
 use OC\Files\Filesystem;
 
-use OCP\IRequest;
-use OCP\AppFramework\Http\DataResponse;
+use OCA\Extract\Service\ExtractionService;
 use OCP\AppFramework\Controller;
-use OCP\Files\NotFoundException;
-use OCP\Files\IRootFolder;
+use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\DataResponse;
+use OCP\Encryption\IManager;
 use OCP\Files\Folder;
 
-use OCP\IL10N;
-use OCP\Encryption\IManager;
+use OCP\Files\InvalidPathException;
+use OCP\Files\IRootFolder;
 
+use OCP\Files\NotFoundException;
+
+use OCP\IL10N;
+use OCP\IRequest;
+use OCP\IURLGenerator;
 use Psr\Log\LoggerInterface;
 
-use OCA\Extract\Service\ExtractionService;
-use OCP\AppFramework\Http;
-use OCP\Files\InvalidPathException;
-use OCP\IURLGenerator;
-
-class ExtractionController extends Controller
-{
+class ExtractionController extends Controller {
 
 	/** @var IL10N */
 	private $l;
@@ -43,22 +42,22 @@ class ExtractionController extends Controller
 	/** @var string */
 	private $userId;
 
-	/**  @var ExtractionService */
+	/** @var ExtractionService */
 	private $extractionService;
 
 	/** @var IURLGenerator */
 	private IURLGenerator $urlGenerator;
 
 	/** @var Array $mimeTypes */
-	private Array $mimeTypes = [
-		"application/zip" => "zip",
-		"application/x-rar-compressed" => "rar",
-		"application/x-tar" => "other",
-		"application/x-7z-compressed" => "other",
-		"application/x-bzip2" => "other",
-		"application/x-deb" => "other",
-		"application/x-gzip" => "other",
-		"application/x-compressed" => "other"
+	private array $mimeTypes = [
+		'application/zip' => 'zip',
+		'application/x-rar-compressed' => 'rar',
+		'application/x-tar' => 'other',
+		'application/x-7z-compressed' => 'other',
+		'application/x-bzip2' => 'other',
+		'application/x-deb' => 'other',
+		'application/x-gzip' => 'other',
+		'application/x-compressed' => 'other'
 	];
 
 	public function __construct(
@@ -83,8 +82,7 @@ class ExtractionController extends Controller
 		$this->urlGenerator = $urlGenerator;
 	}
 
-	private function getFile($directory, $fileName)
-	{
+	private function getFile($directory, $fileName) {
 		$fileNode = $this->userFolder->get($directory . '/' . $fileName);
 		return $fileNode->getStorage()->getLocalFile($fileNode->getInternalPath());
 	}
@@ -97,13 +95,12 @@ class ExtractionController extends Controller
 	 * @param srting $directory The Nextcloud directory name.
 	 *
 	 * @param string $extractTo The local file-system path of the directory
-	 * with the extracted data, i.e. this is the OS path.
+	 *                          with the extracted data, i.e. this is the OS path.
 	 *
 	 * @param null|string $tmpPath The Nextcloud temporary path. This is only
-	 * non-null when extracting from external storage.
+	 *                             non-null when extracting from external storage.
 	 */
-	private function postExtract(string $fileName, string $directory, string $extractTo, ?string $tmpPath)
-	{
+	private function postExtract(string $fileName, string $directory, string $extractTo, ?string $tmpPath) {
 
 		$iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($extractTo));
 		foreach ($iterator as $file) {
@@ -130,13 +127,12 @@ class ExtractionController extends Controller
 	 *
 	 * @NoAdminRequired
 	 */
-	public function extract($nameOfFile, $directory, $external, $mime)
-	{
+	public function extract($nameOfFile, $directory, $external, $mime) {
 		$type = $this->mimeTypes[$mime];
 
 		if ($this->encryptionManager->isEnabled()) {
-			$response = array();
-			$response = array_merge($response, array("code" => 0, "desc" => $this->l->t("Encryption is not supported yet")));
+			$response = [];
+			$response = array_merge($response, ['code' => 0, 'desc' => $this->l->t('Encryption is not supported yet')]);
 			return new DataResponse($response);
 		}
 		$file = $this->getFile($directory, $nameOfFile);
@@ -153,7 +149,7 @@ class ExtractionController extends Controller
 			} catch (\OCP\Files\NotFoundException $e) {
 				$appDirectory = $this->rootFolder->newFolder($appPath);
 			}
-			if (pathinfo($fileName, PATHINFO_EXTENSION) == "tar") {
+			if (pathinfo($fileName, PATHINFO_EXTENSION) == 'tar') {
 				$archiveDir = pathinfo($fileName, PATHINFO_FILENAME);
 			} else {
 				$archiveDir = $fileName;
@@ -181,7 +177,7 @@ class ExtractionController extends Controller
 				break;
 			default:
 				// Check if the file is .tar.gz in order to do the extraction on a single step
-				if (pathinfo($fileName, PATHINFO_EXTENSION) == "tar") {
+				if (pathinfo($fileName, PATHINFO_EXTENSION) == 'tar') {
 					$cleanFileName = pathinfo($fileName, PATHINFO_FILENAME);
 					$extractTo = dirname($extractTo) . '/' . $cleanFileName;
 					$response = $this->extractionService->extractOther($file, $extractTo);
@@ -201,7 +197,7 @@ class ExtractionController extends Controller
 
 		try {
 			// collect and return the properties of the resulting folder node
-			$extractDir = '/' . trim($directory . "/" . $fileName, '/');
+			$extractDir = '/' . trim($directory . '/' . $fileName, '/');
 			$node = $this->userFolder->get($extractDir);
 			$fileId = $node->getId();
 			$owner = $node->getOwner()->getUID();
@@ -224,10 +220,10 @@ class ExtractionController extends Controller
 			$response['extracted'] = $folder;
 
 		} catch (NotFoundException $e) {
-			$this->logger->debug(" - NotFoundException: " . print_r($e->getMessage(), true));
+			$this->logger->debug(' - NotFoundException: ' . print_r($e->getMessage(), true));
 			return new DataResponse([], Http::STATUS_NOT_FOUND);
 		} catch (InvalidPathException $e) {
-			$this->logger->debug(" - InvalidPathException: " . print_r($e->getMessage(), true));
+			$this->logger->debug(' - InvalidPathException: ' . print_r($e->getMessage(), true));
 			return new DataResponse([], Http::STATUS_NOT_FOUND);
 		}
 

@@ -27,8 +27,7 @@ use OCP\IL10N;
 use Psr\Log\LoggerInterface;
 use ZipArchive;
 
-class ExtractionService
-{
+class ExtractionService {
 
 	/** @var IL10N */
 	private $l;
@@ -38,42 +37,40 @@ class ExtractionService
 
 	public function __construct(
 		IL10N $l,
-		LoggerInterface $logger
+		LoggerInterface $logger,
 	) {
 		$this->l = $l;
 		$this->logger = $logger;
 	}
 
-	public function extractZip($file, $extractTo)
-	{
-		$response = array();
+	public function extractZip($file, $extractTo) {
+		$response = [];
 
-		if (!extension_loaded("zip")) {
-			$response = array_merge($response, array("code" => 0, "desc" => $this->l->t("Zip extension is not available")));
+		if (!extension_loaded('zip')) {
+			$response = array_merge($response, ['code' => 0, 'desc' => $this->l->t('Zip extension is not available')]);
 			return $response;
 		}
 
 		$zip = new ZipArchive();
 
-		if (!$zip->open($file) === TRUE) {
-			$response = array_merge($response, array("code" => 0, "desc" => $this->l->t("Cannot open Zip file")));
+		if (!$zip->open($file) === true) {
+			$response = array_merge($response, ['code' => 0, 'desc' => $this->l->t('Cannot open Zip file')]);
 			return $response;
 		}
 
 		$success = $zip->extractTo($extractTo);
 		$zip->close();
-		$response = array_merge($response, array("code" => $success));
+		$response = array_merge($response, ['code' => $success]);
 		return $response;
 	}
 
-	public function extractRar($file, $extractTo)
-	{
-		$response = array();
+	public function extractRar($file, $extractTo) {
+		$response = [];
 
-		if (!extension_loaded("rar")) {
+		if (!extension_loaded('rar')) {
 			exec('unrar x ' . escapeshellarg($file) . ' -R ' . escapeshellarg($extractTo) . '/ -o+', $output, $return);
 			if (sizeof($output) <= 4) {
-				$response = array_merge($response, array("code" => 0, "desc" => $this->l->t("Oops something went wrong. Check that you have rar extension or unrar installed")));
+				$response = array_merge($response, ['code' => 0, 'desc' => $this->l->t('Oops something went wrong. Check that you have rar extension or unrar installed')]);
 				return $response;
 			}
 		} else {
@@ -86,22 +83,21 @@ class ExtractionService
 			rar_close($rar_file);
 		}
 
-		$response = array_merge($response, array("code" => 1));
+		$response = array_merge($response, ['code' => 1]);
 		return $response;
 	}
 
-	public function extractOther($file, $extractTo)
-	{
-		$response = array();
+	public function extractOther($file, $extractTo) {
+		$response = [];
 
 		exec('7za -y x ' . escapeshellarg($file) . ' -o' . escapeshellarg($extractTo), $output, $return);
 
 		if (sizeof($output) <= 5) {
-			$response = array_merge($response, array("code" => 0, "desc" => $this->l->t("Oops something went wrong.")));
-			$this->logger->error("Is 7-Zip installed? Output: " . print_r($output, true));
+			$response = array_merge($response, ['code' => 0, 'desc' => $this->l->t('Oops something went wrong.')]);
+			$this->logger->error('Is 7-Zip installed? Output: ' . print_r($output, true));
 			return $response;
 		}
-		$response = array_merge($response, array("code" => 1));
+		$response = array_merge($response, ['code' => 1]);
 		return $response;
 	}
 }
