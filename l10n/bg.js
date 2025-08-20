@@ -1,14 +1,12 @@
 OC.L10N.register(
     "extract",
     {
-    "Extract here" : "Извличане тук",
-    "Error extracting " : "Грешка при извличане",
     "Encryption is not supported yet" : "Все още не се поддържа kриптиране",
     "Zip extension is not available" : "Разширението Zip не е налично",
     "Cannot open Zip file" : "Zip файлът не може да се отвори ",
     "Oops something went wrong. Check that you have rar extension or unrar installed" : "Опа, нещо се обърка. Проверете дали имате инсталирано разширение rar или unrar",
-    "Oops something went wrong. Check that you have p7zip installed" : "Опа, нещо се обърка. Проверете дали имате инсталиран p7zip",
     "Extract" : "Извличане",
-    "Extract archive from the web interface" : "Извличане на архив от уеб интерфейса"
+    "Extract archive from the web interface" : "Извличане на архив от уеб интерфейса",
+    "Extract here" : "Извличане тук"
 },
 "nplurals=2; plural=(n != 1);");
