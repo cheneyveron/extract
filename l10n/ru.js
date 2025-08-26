@@ -5,6 +5,7 @@ OC.L10N.register(
     "Zip extension is not available" : "Расширение zip не доступно",
     "Cannot open Zip file" : "Невозможно открыть ZIP-файл",
     "Oops something went wrong. Check that you have rar extension or unrar installed" : "Произошла ошибка, проверьте наличие расширения rar или пакета unrar на сервере",
+    "Oops something went wrong." : "Что-то пошло не так.",
     "Extract" : "Извлечь",
     "Extract archive from the web interface" : "Работа с архивами",
     "Extract archives.\n\n*  **Supported :**\n\n    * Zip\n    * Rar\n    * Tar\n    * Gzip\n    * 7z\n    * Deb\n    * Bzip2\n\n*  **Requirements :**\n    * Rar PHP extension  (pecl -v install rar)\n\n    * **OR**\n    * unrar (sudo apt-get install unrar)\n\n    * **AND**\n    * p7zip (sudo apt-get install p7zip p7zip-full)\n\n*  **Note :** Encrypted files are not supported yet" : "Распаковка архивов\n\n* **Поддерживаются :**\n\n* Zip\n* Rar\n* Tar\n* Gzip\n* 7z\n* Deb\n* Bzip2\n\n* **Зависимости :**\n* Rar PHP extension (pecl -v install rar)\n\n* **ИЛИ**\n* unrar (sudo apt-get install unrar)\n\n* **И**\n* p7zip (sudo apt-get install p7zip p7zip-full)\n\n* **Примечание :** Зашифрованные файлы пока не поддерживаются",
