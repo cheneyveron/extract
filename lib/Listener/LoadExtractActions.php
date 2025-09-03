@@ -15,9 +15,13 @@ use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
 use OCP\Util;
 
-class LoadExtractActions implements IEventListener {
+/**
+ * @template-implements IEventListener<LoadAdditionalScriptsEvent>
+ */
+final class LoadExtractActions implements IEventListener {
+	#[\Override]
 	public function handle(Event $event): void {
-		if (!($event instanceof LoadAdditionalScriptsEvent)) {
+		if (!$event instanceof LoadAdditionalScriptsEvent) {
 			return;
 		}
 
