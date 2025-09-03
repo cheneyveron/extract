@@ -25,8 +25,7 @@ final class LoadExtractActions implements IEventListener {
 			return;
 		}
 
-		Util::addInitScript(Application::APP_ID, 'extract-init');
-		Util::addScript(Application::APP_ID, 'extract-extractAction');
+		Util::addScript(Application::APP_ID, 'extract-main');
 		Util::addStyle(Application::APP_ID, 'style');
 	}
 }

@@ -7,45 +7,40 @@
   "license": "agpl",
   "private": true,
   "type": "module",
+  "browser": {
+    "fs": false
+  },
   "scripts": {
-    "vite": "vite",
     "build": "vite build --mode production",
     "dev": "vite build --mode development",
     "watch": "vite build --mode development --watch",
-    "lint": "eslint --ext .js,.ts,.vue src",
-    "lint:fix": "eslint --ext .js,.ts,.vue src --fix",
-    "stylelint": "stylelint src",
-    "stylelint:fix": "stylelint src --fix",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage",
-    "serve": "webpack --node-env development serve --progress"
-  },
-  "dependencies": {
-    "@mdi/svg": "^7.4.47",
-    "@nextcloud/axios": "^2.4.0",
-    "@nextcloud/files": "^3.1.0",
-    "@nextcloud/l10n": "^2.1.0",
-    "@nextcloud/logger": "^3.0.1",
-    "@nextcloud/router": "^3.0.0",
-    "@nextcloud/vue": "^8.11.2",
-    "serve": "^14.2.3",
-    "vue": "^2.7.16"
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
+    "stylelint": "stylelint css/*.css css/*.scss src/**/*.scss",
+    "stylelint:fix": "stylelint css/*.css css/*.scss src/**/*.scss --fix"
   },
   "browserslist": [
     "extends @nextcloud/browserslist-config"
   ],
   "engines": {
-    "node": "^16.0.0",
-    "npm": "^7.0.0 || ^8.0.0"
+    "node": "^22.0.0",
+    "npm": "^10.5.0"
+  },
+  "dependencies": {
+    "@mdi/svg": "^7.4.47",
+    "@nextcloud/axios": "^2.5.1",
+    "@nextcloud/files": "^3.12.0",
+    "@nextcloud/l10n": "^3.4.0",
+    "@nextcloud/logger": "^3.0.2",
+    "@nextcloud/router": "^3.0.1"
   },
   "devDependencies": {
-    "@nextcloud/babel-config": "^1.0.0",
-    "@nextcloud/browserslist-config": "^2.2.0",
-    "@nextcloud/eslint-config": "^v8.3.0-beta.2",
-    "@nextcloud/stylelint-config": "^2.4.0",
-    "@nextcloud/vite-config": "^1.2.5",
-    "@nextcloud/webpack-vue-config": "^6.0.1",
-    "vite": "^5.4.2"
+    "@nextcloud/browserslist-config": "^3.0.1",
+    "@nextcloud/eslint-config": "^9.0.0-rc.5",
+    "@nextcloud/stylelint-config": "^3.1.0",
+    "@nextcloud/vite-config": "^2.5.0",
+    "esbuild-loader": "^4.3.0",
+    "ts-loader": "^9.5.4",
+    "vite": "^7.1.4"
   }
 }
