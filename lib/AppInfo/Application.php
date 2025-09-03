@@ -29,7 +29,7 @@ use OCP\AppFramework\Bootstrap\IBootstrap;
 
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 
-class Application extends App implements IBootstrap {
+final class Application extends App implements IBootstrap {
 
 	public const APP_ID = 'extract';
 
@@ -38,11 +38,13 @@ class Application extends App implements IBootstrap {
 	}
 
 	// Called later than "register".
+	#[\Override]
 	public function boot(IBootContext $context): void {
 	}
 
 	// Called earlier than boot, so anything initialized in the
 	// "boot()" method must not be used here.
+	#[\Override]
 	public function register(IRegistrationContext $context): void {
 		$context->registerEventListener(LoadAdditionalScriptsEvent::class, LoadExtractActions::class);
 	}

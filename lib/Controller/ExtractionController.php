@@ -4,15 +4,15 @@ namespace OCA\Extract\Controller;
 
 // Only in order to access Filesystem::isFileBlacklisted().
 use OC\Files\Filesystem;
-
 use OCA\Extract\Service\ExtractionService;
+
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\Encryption\IManager;
 use OCP\Files\Folder;
-
 use OCP\Files\InvalidPathException;
+
 use OCP\Files\IRootFolder;
 
 use OCP\Files\NotFoundException;
@@ -22,7 +22,7 @@ use OCP\IRequest;
 use OCP\IURLGenerator;
 use Psr\Log\LoggerInterface;
 
-class ExtractionController extends Controller {
+final class ExtractionController extends Controller {
 
 	/** @var IL10N */
 	private $l;
@@ -68,7 +68,7 @@ class ExtractionController extends Controller {
 		IL10N $l,
 		LoggerInterface $logger,
 		IManager $encryptionManager,
-		$UserId,
+		string $UserId,
 		IURLGenerator $urlGenerator,
 	) {
 		parent::__construct($AppName, $request);
@@ -82,7 +82,7 @@ class ExtractionController extends Controller {
 		$this->urlGenerator = $urlGenerator;
 	}
 
-	private function getFile($directory, $fileName) {
+	private function getFile(string $directory, string $fileName): string|false {
 		$fileNode = $this->userFolder->get($directory . '/' . $fileName);
 		return $fileNode->getStorage()->getLocalFile($fileNode->getInternalPath());
 	}
@@ -92,7 +92,7 @@ class ExtractionController extends Controller {
 	 *
 	 * @param string $fileName The Nextcloud file name.
 	 *
-	 * @param srting $directory The Nextcloud directory name.
+	 * @param string $directory The Nextcloud directory name.
 	 *
 	 * @param string $extractTo The local file-system path of the directory
 	 *                          with the extracted data, i.e. this is the OS path.
@@ -100,7 +100,7 @@ class ExtractionController extends Controller {
 	 * @param null|string $tmpPath The Nextcloud temporary path. This is only
 	 *                             non-null when extracting from external storage.
 	 */
-	private function postExtract(string $fileName, string $directory, string $extractTo, ?string $tmpPath) {
+	private function postExtract(string $fileName, string $directory, string $extractTo, ?string $tmpPath): void {
 
 		$iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($extractTo));
 		foreach ($iterator as $file) {
@@ -113,7 +113,7 @@ class ExtractionController extends Controller {
 		}
 
 		$NCDestination = $directory . '/' . $fileName;
-		if ($tmpPath) {
+		if ($tmpPath !== null) {
 			$tmpFolder = $this->rootFolder->get($tmpPath);
 			$tmpFolder->move($this->userFolder->getFullPath($NCDestination));
 		} else {
@@ -127,7 +127,7 @@ class ExtractionController extends Controller {
 	 *
 	 * @NoAdminRequired
 	 */
-	public function extract($nameOfFile, $directory, $external, $mime) {
+	public function extract(string $nameOfFile, string $directory, bool $external, string $mime) {
 		$type = $this->mimeTypes[$mime];
 
 		if ($this->encryptionManager->isEnabled()) {
@@ -136,6 +136,10 @@ class ExtractionController extends Controller {
 			return new DataResponse($response);
 		}
 		$file = $this->getFile($directory, $nameOfFile);
+		if ($file === false) {
+			$response = ['code' => 0, 'desc' => $this->l->t('File not found')];
+			return new DataResponse($response);
+		}
 		$dir = dirname($file);
 		//name of the file without extension
 		$fileName = pathinfo($nameOfFile, PATHINFO_FILENAME);
@@ -200,13 +204,13 @@ class ExtractionController extends Controller {
 			$extractDir = '/' . trim($directory . '/' . $fileName, '/');
 			$node = $this->userFolder->get($extractDir);
 			$fileId = $node->getId();
-			$owner = $node->getOwner()->getUID();
+			$owner = $node->getOwner()?->getUID();
 			$permissions = $node->getPermissions();
 			$mTime = $node->getMTime();
 			$source = $this->urlGenerator->getBaseUrl() . '/remote.php/dav/files/' . $this->userId . "$extractDir";
 			$root = '/files/' . $this->userId;
 			$mountType = $node->getMountPoint()->getMountType();
-			$ownerDisplayName = $node->getOwner()->getDisplayName();
+			$ownerDisplayName = $node->getOwner()?->getDisplayName();
 
 			$folder = [];
 			$folder['fileId'] = $fileId;

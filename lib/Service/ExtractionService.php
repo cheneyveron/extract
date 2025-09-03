@@ -27,7 +27,7 @@ use OCP\IL10N;
 use Psr\Log\LoggerInterface;
 use ZipArchive;
 
-class ExtractionService {
+final class ExtractionService {
 
 	/** @var IL10N */
 	private $l;
@@ -43,7 +43,12 @@ class ExtractionService {
 		$this->logger = $logger;
 	}
 
-	public function extractZip($file, $extractTo) {
+	/**
+	 * @return (bool|int|mixed)[]
+	 *
+	 * @psalm-return array{code: 0|bool, desc?: mixed}
+	 */
+	public function extractZip(string $file, string $extractTo): array {
 		$response = [];
 
 		if (!extension_loaded('zip')) {
@@ -53,7 +58,7 @@ class ExtractionService {
 
 		$zip = new ZipArchive();
 
-		if (!$zip->open($file) === true) {
+		if ($zip->open($file) !== true) {
 			$response = array_merge($response, ['code' => 0, 'desc' => $this->l->t('Cannot open Zip file')]);
 			return $response;
 		}
@@ -64,7 +69,12 @@ class ExtractionService {
 		return $response;
 	}
 
-	public function extractRar($file, $extractTo) {
+	/**
+	 * @return (int|mixed)[]
+	 *
+	 * @psalm-return array{code: 0|1, desc?: mixed}
+	 */
+	public function extractRar(string $file, string $extractTo): array {
 		$response = [];
 
 		if (!extension_loaded('rar')) {
@@ -87,7 +97,12 @@ class ExtractionService {
 		return $response;
 	}
 
-	public function extractOther($file, $extractTo) {
+	/**
+	 * @return (int|mixed)[]
+	 *
+	 * @psalm-return array{code: 0|1, desc?: mixed}
+	 */
+	public function extractOther(string $file, string $extractTo): array {
 		$response = [];
 
 		exec('7za -y x ' . escapeshellarg($file) . ' -o' . escapeshellarg($extractTo), $output, $return);

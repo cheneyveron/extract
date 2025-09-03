@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="6.13.1@1e3b7f0a8ab32b23197b91107adc0a7ed8a05b51">
+  <file src="lib/Listener/LoadExtractActions.php">
+    <InvalidTemplateParam>
+      <code><![CDATA[IEventListener]]></code>
+    </InvalidTemplateParam>
+    <UndefinedDocblockClass>
+      <code><![CDATA[LoadExtractActions]]></code>
+    </UndefinedDocblockClass>
+  </file>
+  <file src="lib/Service/ExtractionService.php">
+    <UndefinedClass>
+      <code><![CDATA[$list]]></code>
+    </UndefinedClass>
+  </file>
+</files>
