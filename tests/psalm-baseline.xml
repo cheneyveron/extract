@@ -8,4 +8,9 @@
       <code><![CDATA[LoadExtractActions]]></code>
     </UndefinedDocblockClass>
   </file>
+  <file src="lib/Service/ExtractionService.php">
+    <UndefinedClass>
+      <code><![CDATA[$list]]></code>
+    </UndefinedClass>
+  </file>
 </files>
