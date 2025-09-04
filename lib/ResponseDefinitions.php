@@ -26,5 +26,5 @@ namespace OCA\Extract;
  *     version: string,
  * }
  */
-class ResponseDefinitions {
+final class ResponseDefinitions {
 }

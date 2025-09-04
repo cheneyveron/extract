@@ -5,20 +5,20 @@ namespace OCA\Extract\Controller;
 // Only in order to access Filesystem::isFileBlacklisted().
 use OC\Files\Filesystem;
 use OCA\Extract\ResponseDefinitions;
-use OCA\Extract\Service\ExtractionService;
 
+use OCA\Extract\Service\ExtractionService;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\ApiRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\Encryption\IManager;
 use OCP\Files\Folder;
+
 use OCP\Files\InvalidPathException;
 
 use OCP\Files\IRootFolder;
 
 use OCP\Files\NotFoundException;
-
 use OCP\IL10N;
 use OCP\IRequest;
 use OCP\IURLGenerator;
@@ -29,29 +29,8 @@ use Psr\Log\LoggerInterface;
  */
 final class ExtractionController extends AEnvironmentAwareController {
 
-	/** @var IL10N */
-	private $l;
-
-	/** @var LoggerInterface */
-	private $logger;
-
-	/** @var IRootFolder */
-	private $rootFolder;
-
 	/** @var Folder */
 	private $userFolder;
-
-	/** @var IManager */
-	protected $encryptionManager;
-
-	/** @var string */
-	private $userId;
-
-	/** @var ExtractionService */
-	private $extractionService;
-
-	/** @var IURLGenerator */
-	private IURLGenerator $urlGenerator;
 
 	/** @var Array $mimeTypes */
 	private array $mimeTypes = [
@@ -68,23 +47,16 @@ final class ExtractionController extends AEnvironmentAwareController {
 	public function __construct(
 		string $AppName,
 		IRequest $request,
-		ExtractionService $extractionService,
-		IRootFolder $rootFolder,
-		IL10N $l,
-		LoggerInterface $logger,
-		IManager $encryptionManager,
-		string $UserId,
-		IURLGenerator $urlGenerator,
+		private ExtractionService $extractionService,
+		private IRootFolder $rootFolder,
+		private IL10N $l,
+		private LoggerInterface $logger,
+		private IManager $encryptionManager,
+		private string $userId,
+		private IURLGenerator $urlGenerator,
 	) {
 		parent::__construct($AppName, $request);
-		$this->l = $l;
-		$this->logger = $logger;
-		$this->encryptionManager = $encryptionManager;
-		$this->userId = $UserId;
-		$this->extractionService = $extractionService;
-		$this->rootFolder = $rootFolder;
 		$this->userFolder = $this->rootFolder->getUserFolder($this->userId);
-		$this->urlGenerator = $urlGenerator;
 	}
 
 	private function getFile(string $directory, string $fileName): string|false {

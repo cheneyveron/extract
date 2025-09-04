@@ -29,18 +29,10 @@ use ZipArchive;
 
 final class ExtractionService {
 
-	/** @var IL10N */
-	private $l;
-
-	/** @var LoggerInterface */
-	private $logger;
-
 	public function __construct(
-		IL10N $l,
-		LoggerInterface $logger,
+		private IL10N $l,
+		private LoggerInterface $logger,
 	) {
-		$this->l = $l;
-		$this->logger = $logger;
 	}
 
 	/**

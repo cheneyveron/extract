@@ -49,5 +49,10 @@
 		"psr-4": {
 			"OCP\\": "vendor/nextcloud/ocp/OCP/"
 		}
+	},
+	"autoload": {
+		"psr-4": {
+			"OCA\\Extract\\": "lib/"
+		}
 	}
 }

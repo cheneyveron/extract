@@ -15,7 +15,7 @@ use Override;
 /**
  * @psalm-import-type ExtractCapabilities from ResponseDefinitions
  */
-class Capabilities implements IPublicCapability {
+final class Capabilities implements IPublicCapability {
 	public const FEATURES = [
 		'extract-zip',
 		'extract-rar',
