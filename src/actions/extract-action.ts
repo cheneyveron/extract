@@ -5,7 +5,7 @@ import axios from '@nextcloud/axios'
 import { emit } from '@nextcloud/event-bus'
 import { FileAction, Folder, Permission } from '@nextcloud/files'
 import { translate as t } from '@nextcloud/l10n'
-import { generateUrl } from '@nextcloud/router'
+import { generateOcsUrl } from '@nextcloud/router'
 
 export const extractAction = new FileAction({
 	id: 'extract',
@@ -44,22 +44,21 @@ export const extractAction = new FileAction({
 			mime: node.attributes?.mime,
 		}
 
-		const url = generateUrl('/apps/extract/ajax/extract.php')
+		const url = generateOcsUrl('/apps/extract/api/v1/extraction/execute')
 		axios.post(url, data)
-			.then((resp) => resp.data)
-			.then((data) => {
-				const time = data.extracted.mtime * 1000
+			.then(({ data }) => {
+				const time = data.ocs.data.extracted.mtime * 1000
 				const folder = new Folder({
-					id: data.extracted.fileId,
-					source: data.extracted.source,
-					root: data.extracted.root,
-					owner: data.extracted.owner,
-					permissions: data.extracted.permissions,
+					id: data.ocs.data.extracted.fileId,
+					source: data.ocs.data.extracted.source,
+					root: data.ocs.data.extracted.root,
+					owner: data.ocs.data.extracted.owner,
+					permissions: data.ocs.data.extracted.permissions,
 					mtime: new Date(time),
 					attributes: {
-						'mount-type': data.extracted['mount-type'],
-						'owner-id': data.extracted.owner,
-						'owner-display-name': data.extracted['owner-display-name'],
+						'mount-type': data.ocs.data.extracted['mount-type'],
+						'owner-id': data.ocs.data.extracted.owner,
+						'owner-display-name': data.ocs.data.extracted['owner-display-name'],
 					},
 				})
 

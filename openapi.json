@@ -1,0 +1,277 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "extract",
+        "version": "0.0.1",
+        "description": "Extract archive from the web interface",
+        "license": {
+            "name": "agpl"
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "basic_auth": {
+                "type": "http",
+                "scheme": "basic"
+            },
+            "bearer_auth": {
+                "type": "http",
+                "scheme": "bearer"
+            }
+        },
+        "schemas": {
+            "Capabilities": {
+                "type": "object",
+                "required": [
+                    "features",
+                    "config",
+                    "version"
+                ],
+                "properties": {
+                    "features": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "config": {
+                        "type": "object"
+                    },
+                    "version": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Folder": {
+                "type": "object",
+                "required": [
+                    "fileId",
+                    "source",
+                    "root",
+                    "owner",
+                    "permissions",
+                    "mtime",
+                    "mount-type",
+                    "owner-display-name"
+                ],
+                "properties": {
+                    "fileId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "source": {
+                        "type": "string"
+                    },
+                    "root": {
+                        "type": "string"
+                    },
+                    "owner": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "permissions": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "mtime": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "mount-type": {
+                        "type": "string"
+                    },
+                    "owner-display-name": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                }
+            },
+            "OCSMeta": {
+                "type": "object",
+                "required": [
+                    "status",
+                    "statuscode"
+                ],
+                "properties": {
+                    "status": {
+                        "type": "string"
+                    },
+                    "statuscode": {
+                        "type": "integer"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "totalitems": {
+                        "type": "string"
+                    },
+                    "itemsperpage": {
+                        "type": "string"
+                    }
+                }
+            },
+            "PublicCapabilities": {
+                "type": "object",
+                "properties": {
+                    "extract": {
+                        "$ref": "#/components/schemas/Capabilities"
+                    }
+                }
+            }
+        }
+    },
+    "paths": {
+        "/ocs/v2.php/apps/extract/api/{apiVersion}/extraction/execute": {
+            "post": {
+                "operationId": "extraction-execute",
+                "summary": "The only AJAX callback. This is a hook for ordinary cloud-users, os no admin required",
+                "tags": [
+                    "extraction"
+                ],
+                "security": [
+                    {
+                        "bearer_auth": []
+                    },
+                    {
+                        "basic_auth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "nameOfFile",
+                                    "directory",
+                                    "external",
+                                    "mime"
+                                ],
+                                "properties": {
+                                    "nameOfFile": {
+                                        "type": "string",
+                                        "description": "Name of the file to be extracted"
+                                    },
+                                    "directory": {
+                                        "type": "string",
+                                        "description": "Directory where the file is located"
+                                    },
+                                    "external": {
+                                        "type": "boolean",
+                                        "description": "Is the file located on an external storage?"
+                                    },
+                                    "mime": {
+                                        "type": "string",
+                                        "description": "MIME type of the file"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "apiVersion",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "v1"
+                            ],
+                            "default": "v1"
+                        }
+                    },
+                    {
+                        "name": "OCS-APIRequest",
+                        "in": "header",
+                        "description": "Required to be true for the API request to pass",
+                        "required": true,
+                        "schema": {
+                            "type": "boolean",
+                            "default": true
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "ocs"
+                                    ],
+                                    "properties": {
+                                        "ocs": {
+                                            "type": "object",
+                                            "required": [
+                                                "meta",
+                                                "data"
+                                            ],
+                                            "properties": {
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/OCSMeta"
+                                                },
+                                                "data": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "code": {
+                                                            "type": "integer",
+                                                            "format": "int64",
+                                                            "enum": [
+                                                                0,
+                                                                1
+                                                            ]
+                                                        },
+                                                        "desc": {
+                                                            "type": "string"
+                                                        },
+                                                        "extracted": {
+                                                            "$ref": "#/components/schemas/Folder"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found or invalid path",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "ocs"
+                                    ],
+                                    "properties": {
+                                        "ocs": {
+                                            "type": "object",
+                                            "required": [
+                                                "meta",
+                                                "data"
+                                            ],
+                                            "properties": {
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/OCSMeta"
+                                                },
+                                                "data": {}
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "tags": []
+}

@@ -46,7 +46,7 @@ final class ExtractionService {
 	/**
 	 * @return (bool|int|mixed)[]
 	 *
-	 * @psalm-return array{code: 0|bool, desc?: mixed}
+	 * @psalm-return array{code: 0|1, desc?: string}
 	 */
 	public function extractZip(string $file, string $extractTo): array {
 		$response = [];
@@ -65,14 +65,14 @@ final class ExtractionService {
 
 		$success = $zip->extractTo($extractTo);
 		$zip->close();
-		$response = array_merge($response, ['code' => $success]);
+		$response = array_merge($response, ['code' => $success ? 1 : 0]);
 		return $response;
 	}
 
 	/**
 	 * @return (int|mixed)[]
 	 *
-	 * @psalm-return array{code: 0|1, desc?: mixed}
+	 * @psalm-return array{code: 0|1, desc?: string}
 	 */
 	public function extractRar(string $file, string $extractTo): array {
 		$response = [];
@@ -100,7 +100,7 @@ final class ExtractionService {
 	/**
 	 * @return (int|mixed)[]
 	 *
-	 * @psalm-return array{code: 0|1, desc?: mixed}
+	 * @psalm-return array{code: 0|1, desc?: string}
 	 */
 	public function extractOther(string $file, string $extractTo): array {
 		$response = [];

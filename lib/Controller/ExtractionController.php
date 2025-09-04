@@ -4,10 +4,12 @@ namespace OCA\Extract\Controller;
 
 // Only in order to access Filesystem::isFileBlacklisted().
 use OC\Files\Filesystem;
+use OCA\Extract\ResponseDefinitions;
 use OCA\Extract\Service\ExtractionService;
 
-use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\Attribute\ApiRoute;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\Encryption\IManager;
 use OCP\Files\Folder;
@@ -22,7 +24,10 @@ use OCP\IRequest;
 use OCP\IURLGenerator;
 use Psr\Log\LoggerInterface;
 
-final class ExtractionController extends Controller {
+/**
+ * @psalm-import-type ExtractFolder from ResponseDefinitions
+ */
+final class ExtractionController extends AEnvironmentAwareController {
 
 	/** @var IL10N */
 	private $l;
@@ -123,11 +128,25 @@ final class ExtractionController extends Controller {
 	}
 
 	/**
-	 * The only AJAX callback. This is a hook for ordinary cloud-users, os no admin required.
+	 * The only AJAX callback. This is a hook for ordinary cloud-users, os no admin required
 	 *
-	 * @NoAdminRequired
+	 * @param string $nameOfFile Name of the file to be extracted
+	 * @param string $directory Directory where the file is located
+	 * @param bool $external Is the file located on an external storage?
+	 * @param string $mime MIME type of the file
+	 * @return DataResponse<Http::STATUS_OK, array{code?: 0|1, desc?: string, extracted?: ExtractFolder}, array{}>|DataResponse<Http::STATUS_NOT_FOUND, array<empty>, array{}>
+	 *
+	 * 200: OK
+	 * 404: Not found or invalid path
 	 */
-	public function extract(string $nameOfFile, string $directory, bool $external, string $mime) {
+	#[ApiRoute(verb: 'POST', url: '/api/{apiVersion}/extraction/execute', requirements: ['apiVersion' => '(v1)'])]
+	#[NoAdminRequired]
+	public function execute(
+		string $nameOfFile,
+		string $directory,
+		bool $external,
+		string $mime,
+	): DataResponse {
 		$type = $this->mimeTypes[$mime];
 
 		if ($this->encryptionManager->isEnabled()) {
