@@ -2,6 +2,7 @@ OC.L10N.register(
     "extract",
     {
     "Encryption is not supported yet" : "شىفىرلاش تېخى قوللىمايدۇ",
+    "File not found" : "ھۆججەت تېپىلمىدى",
     "Zip extension is not available" : "Zip كېڭەيتىلمەيدۇ",
     "Cannot open Zip file" : "Zip ھۆججىتىنى ئاچقىلى بولمايدۇ",
     "Oops something went wrong. Check that you have rar extension or unrar installed" : "ئاپلا خاتالىق بولدى. Rar كېڭەيتىلمە ياكى ئورناتمىغانلىقىنى تەكشۈرۈڭ",

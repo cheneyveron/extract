@@ -2,6 +2,7 @@ OC.L10N.register(
     "extract",
     {
     "Encryption is not supported yet" : "Salaus ei ole vielä tuettu",
+    "File not found" : "Tiedostoa ei löytynyt",
     "Zip extension is not available" : "Zip-laajennus ei ole käytettävissä",
     "Cannot open Zip file" : "Zip-tiedostoa ei voida avata",
     "Oops something went wrong. Check that you have rar extension or unrar installed" : "Hups, jokin meni pieleen. Varmista että rar- tai unrar-laajennus on asennettu",

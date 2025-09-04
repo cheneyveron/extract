@@ -2,6 +2,7 @@ OC.L10N.register(
     "extract",
     {
     "Encryption is not supported yet" : "Шифрование пока не поддерживается",
+    "File not found" : "Файл не найден",
     "Zip extension is not available" : "Расширение zip не доступно",
     "Cannot open Zip file" : "Невозможно открыть ZIP-файл",
     "Oops something went wrong. Check that you have rar extension or unrar installed" : "Произошла ошибка, проверьте наличие расширения rar или пакета unrar на сервере",

@@ -2,6 +2,7 @@ OC.L10N.register(
     "extract",
     {
     "Encryption is not supported yet" : "Henüz şifreleme desteklenmiyor",
+    "File not found" : "Dosya bulunamadı",
     "Zip extension is not available" : "Zip eklentisi kullanılamıyor",
     "Cannot open Zip file" : "ZIP dosyası açılamadı",
     "Oops something went wrong. Check that you have rar extension or unrar installed" : "Bir sorun çıktı. rar ya da unrar eklentilerinin kurulmuş olduğundan emin olun",

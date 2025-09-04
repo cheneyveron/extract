@@ -2,6 +2,7 @@ OC.L10N.register(
     "extract",
     {
     "Encryption is not supported yet" : "Kol kas šifravimas nepalaikomas",
+    "File not found" : "Failas nerastas",
     "Cannot open Zip file" : "Nepavyksta atverti Zip failo",
     "Extract" : "Išskleisti",
     "Extract archive from the web interface" : "Išskleisti archyvą iš saityno sąsajos",

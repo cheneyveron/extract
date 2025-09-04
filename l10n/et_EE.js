@@ -2,6 +2,7 @@ OC.L10N.register(
     "extract",
     {
     "Encryption is not supported yet" : "Krüptitud failid pole veel toetatud",
+    "File not found" : "Faili ei leidu",
     "Zip extension is not available" : "Lisamoodul Zip-failide jaoks pole saadaval",
     "Cannot open Zip file" : "Zip-faili avamine ei õnnestu",
     "Oops something went wrong. Check that you have rar extension or unrar installed" : "Vaat kus lops, midagi läks valesti. Palun kontrolli, et unrar või rar-lisamoodul on serveris paigaldatud",

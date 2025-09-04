@@ -2,6 +2,7 @@ OC.L10N.register(
     "extract",
     {
     "Encryption is not supported yet" : "暗号化Zipはまだサポートされていません",
+    "File not found" : "ファイルが見つかりません",
     "Zip extension is not available" : "Zipエクステンションが利用出来ません",
     "Cannot open Zip file" : "Zipファイルが展開できません",
     "Oops something went wrong. Check that you have rar extension or unrar installed" : "エラーが発生しました。RAR拡張機能またはunrarがインストールされていることを確認してください",
