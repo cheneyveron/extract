@@ -8,7 +8,6 @@ import globals from 'globals'
 
 export default [
 	...recommended,
-
 	{
 		name: 'extract/ignores',
 		ignores: [
@@ -17,9 +16,9 @@ export default [
 			'js/*',
 			// TODO: upstream
 			'openapi-*.json',
+			'node_modules',
 		],
 	},
-
 	{
 		name: 'extract/config',
 		languageOptions: {
@@ -30,7 +29,6 @@ export default [
 			},
 		},
 	},
-
 	{
 		name: 'extract/disabled-during-migration',
 		rules: {
