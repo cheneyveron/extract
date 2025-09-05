@@ -13,13 +13,13 @@
   "scripts": {
     "build": "vite build --mode production",
     "dev": "vite build --mode development",
-    "watch": "vite build --mode development --watch",
-    "typescript:check": "tsc --noEmit",
-    "typescript:generate": "npx openapi-typescript ./openapi.json -t -o src/types/openapi/openapi.ts",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
     "stylelint": "stylelint css/*.css css/*.scss src/**/*.scss",
-    "stylelint:fix": "stylelint css/*.css css/*.scss src/**/*.scss --fix"
+    "stylelint:fix": "stylelint css/*.css css/*.scss src/**/*.scss --fix",
+    "typescript:check": "tsc --noEmit",
+    "typescript:generate": "npx openapi-typescript ./openapi.json -t -o src/types/openapi/openapi.ts",
+    "watch": "vite build --mode development --watch"
   },
   "browserslist": [
     "extends @nextcloud/browserslist-config"
