@@ -2,6 +2,7 @@ OC.L10N.register(
     "extract",
     {
     "Encryption is not supported yet" : "التشفير غير مدعوم حاليّاً",
+    "File not found" : "تعذر العثور على الملف",
     "Zip extension is not available" : "الامتداد ZIP غير مُتاحٍ حاليّاً",
     "Cannot open Zip file" : "لم يُمكن فتح ملف ZIP",
     "Oops something went wrong. Check that you have rar extension or unrar installed" : "وقع خطأٌ ما. تأكد من أن لديك امتداد rar، و أن تطبيق الفكّ unrar قد تمّ تنصيبه",
