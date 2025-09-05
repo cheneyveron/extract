@@ -4,7 +4,6 @@
     <id>extract</id>
     <name>Extract</name>
     <summary>Extract archive from the web interface</summary>
-    <screenshot>https://raw.githubusercontent.com/PaulLereverend/NextcloudExtract/master/img/extract.png</screenshot>
     <description><![CDATA[Extract archives.
 
 *  **Supported :**
@@ -37,6 +36,7 @@
     <category>tools</category>
     <website>https://github.com/PaulLereverend/NextcloudExtract</website>
     <bugs>https://github.com/PaulLereverend/NextcloudExtract/issues</bugs>
+    <screenshot>https://raw.githubusercontent.com/PaulLereverend/NextcloudExtract/master/img/extract.png</screenshot>
     <dependencies>
         <nextcloud min-version="32" max-version="32"/>
     </dependencies>
