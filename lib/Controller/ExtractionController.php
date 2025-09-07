@@ -2,8 +2,7 @@
 
 namespace OCA\Extract\Controller;
 
-// Only in order to access Filesystem::isFileBlacklisted().
-use OC\Files\Filesystem;
+use OCP\Files\Storage\IStorage;
 use OCA\Extract\ResponseDefinitions;
 
 use OCA\Extract\Service\ExtractionService;
@@ -65,6 +64,42 @@ final class ExtractionController extends AEnvironmentAwareController {
 	}
 
 	/**
+	 * Check if a file is blacklisted (replacement for deprecated Filesystem::isFileBlacklisted)
+	 */
+	private function isBlacklistedFile(string $filename): bool {
+		// Common blacklisted patterns from NextCloud
+		$blacklistedPatterns = [
+			'.htaccess',
+			'.htpasswd',
+			'Thumbs.db',
+			'thumbs.db',
+			'.DS_Store',
+			'desktop.ini',
+			'~$*',
+			'*.tmp',
+			'*.temp',
+			'*.part',
+			'*.filepart',
+			'*.swp',
+			'*.swo',
+			'*~',
+		];
+
+		foreach ($blacklistedPatterns as $pattern) {
+			if (fnmatch($pattern, $filename, FNM_CASEFOLD)) {
+				return true;
+			}
+		}
+
+		// Check for hidden files starting with dot (except . and ..)
+		if (str_starts_with($filename, '.') && $filename !== '.' && $filename !== '..') {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Register the new files to the NC filesystem.
 	 *
 	 * @param string $fileName The Nextcloud file name.
@@ -82,7 +117,9 @@ final class ExtractionController extends AEnvironmentAwareController {
 		$iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($extractTo));
 		foreach ($iterator as $file) {
 			/** @var \SplFileInfo $file */
-			if (Filesystem::isFileBlacklisted($file->getBasename())) {
+			// Check for common blacklisted files (replacing deprecated isFileBlacklisted)
+			$basename = $file->getBasename();
+			if ($this->isBlacklistedFile($basename)) {
 				$this->logger->warning(__METHOD__ . ': removing blacklisted file: ' . $file->getPathname());
 				// remove it
 				unlink($file->getPathname());

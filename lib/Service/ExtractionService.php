@@ -70,9 +70,27 @@ final class ExtractionService {
 		$response = [];
 
 		if (!extension_loaded('rar')) {
-			exec('unrar x ' . escapeshellarg($file) . ' -R ' . escapeshellarg($extractTo) . '/ -o+', $output, $return);
-			if (sizeof($output) <= 4) {
-				$response = array_merge($response, ['code' => 0, 'desc' => $this->l->t('Oops something went wrong. Check that you have rar extension or unrar installed')]);
+			// Try different RAR extraction tools in order of preference
+			$success = false;
+			
+			// Try unrar first (most common)
+			if (shell_exec('which unrar 2>/dev/null')) {
+				exec('unrar x ' . escapeshellarg($file) . ' -R ' . escapeshellarg($extractTo) . '/ -o+', $output, $return);
+				if (count($output) > 4 && $return === 0) {
+					$success = true;
+				}
+			}
+			
+			// Try unar as alternative if unrar failed or not available
+			if (!$success && shell_exec('which unar 2>/dev/null')) {
+				exec('unar ' . escapeshellarg($file) . ' -o ' . escapeshellarg($extractTo) . ' -f', $output, $return);
+				if ($return === 0) {
+					$success = true;
+				}
+			}
+			
+			if (!$success) {
+				$response = array_merge($response, ['code' => 0, 'desc' => $this->l->t('RAR extraction failed. Please install unrar, unar, or the rar PHP extension')]);
 				return $response;
 			}
 		} else {
@@ -99,7 +117,7 @@ final class ExtractionService {
 
 		exec('7za -y x ' . escapeshellarg($file) . ' -o' . escapeshellarg($extractTo), $output, $return);
 
-		if (sizeof($output) <= 5) {
+		if (count($output) <= 5) {
 			$response = array_merge($response, ['code' => 0, 'desc' => $this->l->t('Oops something went wrong.')]);
 			$this->logger->error('Is 7-Zip installed? Output: ' . print_r($output, true));
 			return $response;
